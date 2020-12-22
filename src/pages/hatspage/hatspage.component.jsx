@@ -1,7 +1,9 @@
 import React from 'react';
 
+import ImageInput from '../../components/image-input/image-input.component';
+
 const HatsPage = () => (
-   <h1> Hats Page </h1>
+   <ImageInput />
 )
 
 export default HatsPage;

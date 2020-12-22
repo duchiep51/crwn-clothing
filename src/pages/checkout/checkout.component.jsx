@@ -1,41 +1,41 @@
 import React from 'react';
+import axios from 'axios';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
 import { selectCartItems, selectCartTotal } from '../../redux/cart/cart.selectors';
+import { selectCurrentUser } from '../../redux/user/user.selector';
 
 import CustomButton from '../../components/custom-button/custom-button.component';
+import CheckoutItem from '../../components/checkout-item/checkout-item.component';
 
 import './checkout.styles.scss';
+import { clearCart } from '../../redux/cart/cart.actions';
 
-import axios from 'axios';
+const checkOut = ({ id }, cartTotal, cartItems, clearCart) => {
 
-const test = () => {
+    const cloneItems = cartItems.map(item => ({
+        productId: item._id,
+        quantity: item.quantity
+    }))
     axios({
         url: 'orders',
         method: 'post',
         data: {
-            "userId": "5fd73c3865e394467846d889",
-            "totalPrice": 200,
+            "userId": id,
+            "totalPrice": cartTotal,
             "details": [
-                {
-                    "productId": "5fd7051ec3649a48983a63a6",
-                    "quantity": 20
-                },
-                {
-                    "productId": "5fd70992be1c344600db7337",
-                    "quantity": 19
-                }
+                ...cloneItems
             ]
         }
     }).then(res => {
-        alert('succeed!')
+       clearCart();
     }).catch(error => {
         // console.log('error: ', JSON.parse(error));
-        alert('There was an error.');
+        alert('There was an error.', error);
     });
 }
-const CheckoutPage = ({ cartItems, cartTotal }) => (
+const CheckoutPage = ({ cartItems, cartTotal, currentUser, clearCart }) => (
     <div className='checkout-page'>
         <div className='checkout-header'>
             <div className='header-block'>
@@ -55,18 +55,25 @@ const CheckoutPage = ({ cartItems, cartTotal }) => (
             </div>
         </div>
         {
-            cartItems.map((item) => item.name)
+            cartItems.map((item) => (
+                <CheckoutItem key={item._id} item={item} />
+            ))
         }
         <div className='total'> TOTAL: ${cartTotal} </div>
         <CustomButton onClick={
-            test
-        } > Test API </CustomButton>
+            () => checkOut(currentUser, cartTotal, cartItems, clearCart)
+        } > CHECK OUT </CustomButton>
     </div>
 );
 
 const mapStateToProps = createStructuredSelector({
     cartItems: selectCartItems,
-    cartTotal: selectCartTotal
+    cartTotal: selectCartTotal,
+    currentUser: selectCurrentUser
 })
 
-export default connect(mapStateToProps)(CheckoutPage);
+const mapDispatchToProps = dispatch => ({
+    clearCart: () => dispatch(clearCart())
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(CheckoutPage);

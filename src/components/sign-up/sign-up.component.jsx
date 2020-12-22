@@ -5,6 +5,8 @@ import CustomButton from '../custom-button/custom-button.component';
 
 import { auth, createUserProfileDocument } from '../../firebase/firebase.utils';
 
+import axios from 'axios';
+
 import './sign-up.styles.scss';
 
 class SignUp extends React.Component {
@@ -12,6 +14,7 @@ class SignUp extends React.Component {
         super();
 
         this.state = {
+            id: '',
             displayName: '',
             email: '',
             password: '',
@@ -30,10 +33,30 @@ class SignUp extends React.Component {
         }
 
         try {
-            const { user } = auth.createUserWithEmailAndPassword(email, password);
+            auth.createUserWithEmailAndPassword(email, password)
+            .then(async result => {
+                const { user } = result;
 
-            await createUserProfileDocument(user, { displayName });
+                const doc = await createUserProfileDocument(user, { displayName });
 
+                if (result.additionalUserInfo.isNewUser) {
+                axios({
+                  url: `users/sign-up`,
+                  method: 'post',
+                  data: {
+                    id: user.uid,
+                    email: user.email,
+                    phone: user.phoneNumber,
+                    fullname: displayName
+                  }
+                }).then(() => {
+                  console.log("success!!!")
+                }).catch(error => {
+                  console.log(error);
+                })
+              }
+            });
+            
             this.setState({
                 displayName: '',
                 email: '',
