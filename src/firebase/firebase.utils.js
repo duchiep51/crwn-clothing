@@ -4,6 +4,8 @@ import 'firebase/auth';
 import 'firebase/storage';
 import axios from 'axios';
 
+import { HEROKU_SERVER } from '../constants/urls';
+
 var config = {
     apiKey: "AIzaSyBuh_XUVFzU3_6ZzaOeBpu2i9cBahPWbGU",
     authDomain: "clwn-clothing-8618c.firebaseapp.com",
@@ -90,7 +92,7 @@ var config = {
       const { user } = result;
       if (result.additionalUserInfo.isNewUser) {
         axios({
-          url: `users/sign-up`,
+          url: `${HEROKU_SERVER}/users/sign-up`,
           method: 'post',
           data: {
             id: user.uid,

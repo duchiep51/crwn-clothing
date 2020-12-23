@@ -11,6 +11,7 @@ import CheckoutItem from '../../components/checkout-item/checkout-item.component
 
 import './checkout.styles.scss';
 import { clearCart } from '../../redux/cart/cart.actions';
+import { HEROKU_SERVER } from '../../constants/urls';
 
 const checkOut = ({ id }, cartTotal, cartItems, clearCart) => {
 
@@ -19,7 +20,7 @@ const checkOut = ({ id }, cartTotal, cartItems, clearCart) => {
         quantity: item.quantity
     }))
     axios({
-        url: 'orders',
+        url: `${ HEROKU_SERVER }orders`,
         method: 'post',
         data: {
             "userId": id,

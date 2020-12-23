@@ -4,6 +4,7 @@ import SHOP_DATA from './shop.data.js';
 import axios from 'axios';
 
 import CollectionPreview from '../../components/collection-preview/collection-preview.component';
+import { HEROKU_SERVER } from '../../constants/urls.js';
 
 class ShopPage extends React.Component {
 
@@ -18,7 +19,7 @@ class ShopPage extends React.Component {
     getData = async () => {
         let data = null;
         try {
-            const response = await axios.get('products');
+            const response = await axios.get(`${HEROKU_SERVER}/products`);
 
             data = response.data;
             
@@ -31,7 +32,7 @@ class ShopPage extends React.Component {
 
     async componentDidMount() {
         try {
-            const response = await axios.get('categories');
+            const response = await axios.get(`${HEROKU_SERVER}/categories`);
 
             this.setState({ collections: response.data });
             

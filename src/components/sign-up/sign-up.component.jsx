@@ -5,6 +5,8 @@ import CustomButton from '../custom-button/custom-button.component';
 
 import { auth } from '../../firebase/firebase.utils';
 
+import { HEROKU_SERVER } from '../../constants/urls';
+
 import axios from 'axios';
 
 import './sign-up.styles.scss';
@@ -39,7 +41,7 @@ class SignUp extends React.Component {
 
                 if (result.additionalUserInfo.isNewUser) {
                 axios({
-                  url: `users/sign-up`,
+                  url: `${HEROKU_SERVER}/users/sign-up`,
                   method: 'post',
                   data: {
                     id: user.uid,
