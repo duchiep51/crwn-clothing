@@ -3,7 +3,7 @@ import React from 'react';
 import FormInput from '../form-input/form-input.component';
 import CustomButton from '../custom-button/custom-button.component';
 
-import { auth, createUserProfileDocument } from '../../firebase/firebase.utils';
+import { auth } from '../../firebase/firebase.utils';
 
 import axios from 'axios';
 
@@ -36,8 +36,6 @@ class SignUp extends React.Component {
             auth.createUserWithEmailAndPassword(email, password)
             .then(async result => {
                 const { user } = result;
-
-                const doc = await createUserProfileDocument(user, { displayName });
 
                 if (result.additionalUserInfo.isNewUser) {
                 axios({

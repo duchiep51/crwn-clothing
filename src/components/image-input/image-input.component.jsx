@@ -30,7 +30,7 @@ class ImageInput extends React.Component {
                     id='group_image' 
                     type='file' 
                     onChange={this.handChange}/>
-                <img id='target' src={this.state.image}/>
+                <img id='target' alt='' src={this.state.image}/>
             </div>
         );
     }
