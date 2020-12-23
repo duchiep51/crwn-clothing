@@ -20,7 +20,7 @@ const checkOut = ({ id }, cartTotal, cartItems, clearCart) => {
         quantity: item.quantity
     }))
     axios({
-        url: `${ HEROKU_SERVER }orders`,
+        url: `${ HEROKU_SERVER }/orders`,
         method: 'post',
         data: {
             "userId": id,
